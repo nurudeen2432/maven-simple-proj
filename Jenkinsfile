@@ -9,7 +9,9 @@ pipeline {
         }
     stage('Execute Bash') {
         steps {
-            'ls -l'
+            script{
+            sh 'ls -l'
+            }
         }
       }
     }
