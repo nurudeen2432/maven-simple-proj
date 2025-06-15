@@ -7,9 +7,9 @@ pipeline {
                 echo 'Hello World'
             }
         }
-    stage('Run script') {
+    stage('Execute Bash') {
         steps {
-            ls -l
+            'ls -l'
         }
       }
     }
