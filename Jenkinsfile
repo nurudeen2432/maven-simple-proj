@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'UX_IBT'
+        label 'ubuntu'
     }
     parameters{
         string(name:'Branch_Name', defaultValue:'master', description: 'Enter the branch to checkout')
