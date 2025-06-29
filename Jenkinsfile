@@ -43,6 +43,18 @@ pipeline {
             }
         }
     }
+        stage('Deply to dev') {
+            steps {
+               script {
+                   def remote [name: 'jenkins-server', host: '34.201.250.49', allowAnyHost: true]
+                   withCredentials([usernamePassword(credentialsId: 'server-ssh', passwordVariable: 'host-password', usernameVariable: 'host-username')]) {
+                    remote.user = host-username
+                    remote.password = host-password
+                    sshPut remote: remote, from: 'target/maven-simple-proj-3.0-SNAPSHOT.jar', into: '/opt/tomcat/apps'
+}
+               }
+            }
+        }
     post{
         always{
             emailext body: 'test', subject: 'test', to: 'nurudeendurowade@gmail.com'
