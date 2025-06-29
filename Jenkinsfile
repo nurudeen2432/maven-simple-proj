@@ -2,12 +2,13 @@ pipeline {
     agent {
         label 'ubuntu'
     }
-    parameters{
-        string(name:'Branch_Name', defaultValue:'master', description: 'Enter the branch to checkout')
-        choice(name:'CHOICES', choices: ['one', 'two', 'three'], description: 'choose a number')
+
+    parameters {
+        string(name: 'Branch_Name', defaultValue: 'master', description: 'Enter the branch to checkout')
+        choice(name: 'CHOICES', choices: ['one', 'two', 'three'], description: 'Choose a number')
     }
 
-    tools{
+    tools {
         maven 'maven_3.8'
     }
 
@@ -17,7 +18,8 @@ pipeline {
                 echo 'Hello World'
             }
         }
-    stage('mvn version') {
+
+        stage('Maven Version') {
             steps {
                 sh 'mvn --version'
             }
@@ -29,10 +31,10 @@ pipeline {
             }
         }
 
-        stage('Git checkout') {
+        stage('Git Checkout') {
             steps {
                 checkout scmGit(
-                    branches: [[name: '*/master']],
+                    branches: [[name: "*/${params.Branch_Name}"]],
                     extensions: [],
                     userRemoteConfigs: [[
                         credentialsId: 'github-login-cred',
@@ -42,21 +44,23 @@ pipeline {
                 sh 'ls -lrt'
             }
         }
-    }
-        stage('Deply to dev') {
+
+        stage('Deploy to Dev') {
             steps {
-               script {
-                   def remote = [name: 'jenkins-server', host: '34.201.250.49', allowAnyHost: true]
-                   withCredentials([usernamePassword(credentialsId: 'server-ssh', passwordVariable: 'host-password', usernameVariable: 'host-username')]) {
-                    remote.user = host-username
-                    remote.password = host-password
-                    sshPut remote: remote, from: 'target/maven-simple-proj-3.0-SNAPSHOT.jar', into: '/opt/tomcat/apps'
-}
-               }
+                script {
+                    def remote = [name: 'jenkins-server', host: '34.201.250.49', allowAnyHost: true]
+                    withCredentials([usernamePassword(credentialsId: 'server-ssh', passwordVariable: 'host_password', usernameVariable: 'host_username')]) {
+                        remote.user = host_username
+                        remote.password = host_password
+                        sshPut remote: remote, from: 'target/maven-simple-proj-3.0-SNAPSHOT.jar', into: '/opt/tomcat/apps'
+                    }
+                }
             }
         }
-    post{
-        always{
+    }
+
+    post {
+        always {
             emailext body: 'test', subject: 'test', to: 'nurudeendurowade@gmail.com'
         }
     }
