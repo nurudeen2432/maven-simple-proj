@@ -46,7 +46,7 @@ pipeline {
         stage('Deply to dev') {
             steps {
                script {
-                   def remote [name: 'jenkins-server', host: '34.201.250.49', allowAnyHost: true]
+                   def remote = [name: 'jenkins-server', host: '34.201.250.49', allowAnyHost: true]
                    withCredentials([usernamePassword(credentialsId: 'server-ssh', passwordVariable: 'host-password', usernameVariable: 'host-username')]) {
                     remote.user = host-username
                     remote.password = host-password
