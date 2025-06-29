@@ -58,10 +58,4 @@ pipeline {
             }
         }
     }
-
-    post {
-        always {
-            emailext body: 'test', subject: 'test', to: 'nurudeendurowade@gmail.com'
-        }
-    }
 }
